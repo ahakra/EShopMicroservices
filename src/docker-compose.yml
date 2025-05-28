@@ -1,0 +1,18 @@
+﻿services:
+#  catalog.api:
+#    image: catalog.api
+#    build:
+#      context: .
+#      dockerfile: Services/Catalog/Catalog.API/Dockerfile
+#      
+  catalogdb:
+      image: postgres:16
+      restart: always
+      shm_size: 128mb
+      environment:
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=CatalogDB
+      ports:
+        - "5432:5432"
+
