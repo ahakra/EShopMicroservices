@@ -1,10 +1,5 @@
 ﻿services:
-#  catalog.api:
-#    image: catalog.api
-#    build:
-#      context: .
-#      dockerfile: Services/Catalog/Catalog.API/Dockerfile
-#      
+
   catalogdb:
       image: postgres:16
       restart: always
@@ -15,4 +10,19 @@
         - POSTGRES_DB=CatalogDB
       ports:
         - "5432:5432"
-
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+        context: .
+        dockerfile: Services/Catalog/Catalog.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=6000
+      #- ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDB;User Id=postgres;Password=postgres;Include Error Detail=true
+    depends_on:
+      - catalogdb
+    ports:
+      - "6000:6000"
+      - "6060:6060"
+  
