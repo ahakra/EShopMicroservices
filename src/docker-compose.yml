@@ -36,7 +36,7 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=6000
-      #- ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDB;User Id=postgres;Password=postgres;Include Error Detail=true
     depends_on:
       - catalogdb
@@ -52,14 +52,16 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=6001
-      #- ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=basketdb;Port=5433;Database=CatalogDB;User Id=postgres;Password=postgres;Include Error Detail=true
       - ConnectionStrings__Redis=distributedcache:6379
+      - GrpcSettings__DiscountUrl=https://discount.grpc:8081
     depends_on:
       - catalogdb
       - distributedcache
     ports:
       - "6001:6001"
+      - "6061:8081"
 
   discount.grpc:
     image: ${DOCKER_REGISTRY-}discountgrpc
@@ -69,8 +71,8 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      #- ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Data Source=discountdb
     ports:
         - "6002:8080"
-       # - "6062:8081"
+        - "6062:8081"
