@@ -1,3 +1,4 @@
+using BuildingBlocks.Messaging.MassTransit;
 using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -50,6 +51,8 @@ builder.Services.AddHealthChecks()
     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddMessageBroker(builder.Configuration);
+
 var app = builder.Build();
 
 //configure the http request pipeline
